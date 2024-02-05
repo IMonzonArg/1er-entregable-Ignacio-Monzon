@@ -1,0 +1,92 @@
+[
+    {
+      "id": 1,
+      "title": "Arco de Madera",
+      "description": "Arco hecho de madera resistente",
+      "price": 50,
+      "thumbnail": "madera_thumbnail.jpg",
+      "code": "ARC001",
+      "stock": 20
+    },
+    {
+      "id": 2,
+      "title": "Arco de Metal",
+      "description": "Arco de alta calidad hecho de metal",
+      "price": 80,
+      "thumbnail": "metal_thumbnail.jpg",
+      "code": "ARC002",
+      "stock": 15
+    },
+    {
+      "id": 3,
+      "title": "Arco Compuesto",
+      "description": "Arco compuesto para mayor precisión",
+      "price": 120,
+      "thumbnail": "compuesto_thumbnail.jpg",
+      "code": "ARC003",
+      "stock": 10
+    },
+    {
+      "id": 4,
+      "title": "Arco Recurvo",
+      "description": "Arco recurvo clásico para principiantes",
+      "price": 60,
+      "thumbnail": "recurvo_thumbnail.jpg",
+      "code": "ARC004",
+      "stock": 25
+    },
+    {
+      "id": 5,
+      "title": "Arco de Fibra de Carbono",
+      "description": "Arco ligero y duradero de fibra de carbono",
+      "price": 150,
+      "thumbnail": "fibra_carbono_thumbnail.jpg",
+      "code": "ARC005",
+      "stock": 12
+    },
+    {
+      "id": 6,
+      "title": "Arco de Caza",
+      "description": "Arco diseñado para la caza deportiva",
+      "price": 100,
+      "thumbnail": "caza_thumbnail.jpg",
+      "code": "ARC006",
+      "stock": 18
+    },
+    {
+      "id": 7,
+      "title": "Arco Longbow",
+      "description": "Arco longbow tradicional",
+      "price": 70,
+      "thumbnail": "longbow_thumbnail.jpg",
+      "code": "ARC007",
+      "stock": 22
+    },
+    {
+      "id": 8,
+      "title": "Arco Juvenil",
+      "description": "Arco diseñado para jóvenes arqueros",
+      "price": 40,
+      "thumbnail": "juvenil_thumbnail.jpg",
+      "code": "ARC008",
+      "stock": 30
+    },
+    {
+      "id": 9,
+      "title": "Arco de Precisión",
+      "description": "Arco de precisión para competiciones",
+      "price": 200,
+      "thumbnail": "precision_thumbnail.jpg",
+      "code": "ARC009",
+      "stock": 8
+    },
+    {
+      "id": 10,
+      "title": "Arco de Entrenamiento",
+      "description": "Arco ideal para entrenamiento y práctica",
+      "price": 45,
+      "thumbnail": "entrenamiento_thumbnail.jpg",
+      "code": "ARC010",
+      "stock": 28
+    }
+  ]
