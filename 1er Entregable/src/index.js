@@ -1,39 +1,20 @@
 import express from 'express';
-import { ProductManager } from './config/productManager.js';
+import productsRouter from './routes/productsRouter.js';
+import {__dirname} from './path.js'
+import cartRouter from './routes/cartRouter.js';
+
+console.log(__dirname)
+
 
 const app = express();
 const PORT = 8080;
-const productManager = new ProductManager('./src/productos.json');
 
-productManager.initFile().then(() => {
-    app.get('/', (req, res) => {
-        res.send('Hola desde mi primer servidor en express');
-    });
 
-    app.get('/products', async (req, res) => {
-        const { limit } = req.query;
-        console.log(limit);
-    
-        const products = await productManager.getProducts();
-        const limitNumber = parseInt(limit, 10);
-    
-        if (!isNaN(limitNumber)) {
-            const prodsLimit = products.slice(0, limitNumber);
-            res.send(prodsLimit);
-        } else {
-            res.send(products);
-        }
-    });
-    
+app.use(express.json())
+app.use ('/api/products', productsRouter)
+app.use('/api/cart', cartRouter);
+app.use('/static', express.static(__dirname + ('/public')))
 
-    app.get('/products/:id', async (req, res) => {
-        const { id } = req.params;
-        const product = await productManager.getProductById(id);
-        
-        res.send(product);
-    });
-    
     app.listen(PORT, () => {
         console.log(`Server on port ${PORT}`);
     });
-});

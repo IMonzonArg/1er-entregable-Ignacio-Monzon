@@ -1,9 +1,12 @@
 import { promises as fs } from 'fs';
-import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 
 class ProductManager {
-    constructor(filePath) {
-        this.path = path.join(process.cwd(), filePath);
+    constructor() {
+        const __filename = fileURLToPath(import.meta.url);
+        const __dirname = dirname(__filename);
+        this.path = join(__dirname, '..', 'data', 'productos.json');
         this.initFile();
     }
 
@@ -16,6 +19,7 @@ class ProductManager {
         }
     }
 
+
     async addProduct(nuevoProducto) {
         const products = await this.getProducts();
 
@@ -23,7 +27,6 @@ class ProductManager {
             nuevoProducto.title &&
             nuevoProducto.description &&
             nuevoProducto.price &&
-            nuevoProducto.thumbnail &&
             nuevoProducto.code &&
             nuevoProducto.stock
         ) {
@@ -37,11 +40,12 @@ class ProductManager {
                     title: nuevoProducto.title,
                     description: nuevoProducto.description,
                     price: nuevoProducto.price,
-                    thumbnail: nuevoProducto.thumbnail,
                     code: nuevoProducto.code,
                     stock: nuevoProducto.stock,
                 };
-
+                nuevoProducto.status = true
+                if(!nuevoProducto.thumbnail)
+                    nuevoProducto.thumbnail = []
                 products.push(newProduct);
                 await fs.writeFile(this.path, JSON.stringify(products, null, 2));
                 return { success: true, message: "Producto agregado correctamente" };
@@ -56,16 +60,6 @@ class ProductManager {
     async getProducts() {
             const filesContent = await fs.readFile(this.path, 'utf-8');
             return JSON.parse(filesContent);
-    }
-
-    async getProductById(id) {
-        const products = await this.getProducts();
-        const product = products.find(producto => producto.id === Number(id));
-        if (product) {
-            return product;
-        } else {
-            return 'Producto no existente';
-        }
     }
 
     async getProductById(id) {
@@ -84,8 +78,8 @@ class ProductManager {
 
     async updateProduct(id, updatedData) {
         const products = await this.getProducts();
-        const indexToUpdate = products.findIndex((product) => product.id === id);
-
+        const indexToUpdate = products.findIndex((product) => product.id === parseInt(id));
+    
         if (indexToUpdate !== -1) {
             products[indexToUpdate] = { ...products[indexToUpdate], ...updatedData };
             await fs.writeFile(this.path, JSON.stringify(products, null, 2));
@@ -93,12 +87,16 @@ class ProductManager {
         }
         return { success: false, message: "El producto no pudo ser actualizado" };
     }
+    
 
     async deleteProduct(id) {
         const products = await this.getProducts();
         const updatedProducts = products.filter((product) => product.id !== id);
         await fs.writeFile(this.path, JSON.stringify(updatedProducts, null, 2));
+        
+        return { success: true, message: "Producto eliminado correctamente" };
     }
+    
 }
 
 export { ProductManager };
