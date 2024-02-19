@@ -91,7 +91,7 @@ class ProductManager {
 
     async deleteProduct(id) {
         const products = await this.getProducts();
-        const updatedProducts = products.filter((product) => product.id !== id);
+        const updatedProducts = products.filter((product) => product.id != id);
         await fs.writeFile(this.path, JSON.stringify(updatedProducts, null, 2));
         
         return { success: true, message: "Producto eliminado correctamente" };

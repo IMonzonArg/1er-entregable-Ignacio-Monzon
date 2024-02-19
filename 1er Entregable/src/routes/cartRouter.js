@@ -2,10 +2,8 @@ import { Router } from "express";
 import { CartManager } from '../config/CartManager.js';
 import path from 'path';
 
-// Obtener la ruta del directorio del archivo actual (__dirname)
 const currentDir = process.cwd();
 
-// Construir la ruta completa del archivo cart.json
 const cartFilePath = path.join(currentDir, 'src', 'data', 'cart.json');
 
 console.log('Cart file path:', cartFilePath);
@@ -13,7 +11,7 @@ console.log('Cart file path:', cartFilePath);
 const cartManager = new CartManager(cartFilePath);
 const cartRouter = Router();
 
-cartRouter.get('/', async (req, res) => {
+cartRouter.get('/:cid', async (req, res) => {
     try {
         const cart = await cartManager.getCart();
         res.status(200).send(cart);
@@ -22,7 +20,27 @@ cartRouter.get('/', async (req, res) => {
     }
 });
 
-cartRouter.post('/:pid', async (req, res) => {
+cartRouter.post('/', async(req,res) => {
+    try{
+        const newCartId = await  cartManager.createCart();
+        res.status(200).send({id: newCartId})
+    } catch(error){
+        res.status(500).send( `Error interno del servidor al crear un nuevo carrito: ${error}`)
+    }
+})
+
+
+
+
+
+
+
+
+
+
+
+
+cartRouter.post('/:cid/product/:pid', async (req, res) => {
     try {
         const { pid } = req.params; 
         const { quantity } = req.body;

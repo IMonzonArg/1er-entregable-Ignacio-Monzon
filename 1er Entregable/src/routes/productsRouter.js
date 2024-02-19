@@ -32,7 +32,7 @@ productsRouter.get('/', async (req, res) => {
 
     
 
-    productsRouter.get('/:id', async (req, res) => {
+    productsRouter.get('/:pid', async (req, res) => {
         try {
             const { id } = req.params;
             const product = await productManager.getProductById(id);
@@ -59,7 +59,7 @@ productsRouter.get('/', async (req, res) => {
     });
     
 
-    productsRouter.put('/:id', async (req, res) => {
+    productsRouter.put('/:pid', async (req, res) => {
         try {
             const { id } = req.params;
             const prodUpdate = req.body;

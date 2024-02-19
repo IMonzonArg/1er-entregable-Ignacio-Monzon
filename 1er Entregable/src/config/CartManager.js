@@ -3,7 +3,6 @@ import { promises as fs } from 'fs';
 
 class CartManager {
     constructor(path){
-        this.id = crypto.randomBytes(10).toString('hex');
         this.path = path; 
     }
 
@@ -27,6 +26,12 @@ class CartManager {
         }
         await fs.writeFile(this.path, JSON.stringify(cart, null, 2));
         return "Producto cargado correctamente";
+    }
+
+    async createCart() {
+        const cartId = crypto.randomBytes(10).toString('hex');
+        await fs.writeFile(this.path, JSON.stringify({id: cartId, products: []} ,null, 2));
+        return cartId
     }
 }
 
