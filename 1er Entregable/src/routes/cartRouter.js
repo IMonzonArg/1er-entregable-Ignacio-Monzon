@@ -6,8 +6,6 @@ const currentDir = process.cwd();
 
 const cartFilePath = path.join(currentDir, 'src', 'data', 'cart.json');
 
-console.log('Cart file path:', cartFilePath);
-
 const cartManager = new CartManager(cartFilePath);
 const cartRouter = Router();
 
@@ -28,17 +26,6 @@ cartRouter.post('/', async(req,res) => {
         res.status(500).send( `Error interno del servidor al crear un nuevo carrito: ${error}`)
     }
 })
-
-
-
-
-
-
-
-
-
-
-
 
 cartRouter.post('/:cid/product/:pid', async (req, res) => {
     try {

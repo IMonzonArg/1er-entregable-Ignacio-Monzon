@@ -23,6 +23,7 @@
     "escape-html": "^1.0.3",
     "etag": "^1.8.1",
     "express": "^4.18.2",
+    "express-handlebars": "^7.1.2",
     "finalhandler": "^1.2.0",
     "forwarded": "^0.2.0",
     "fresh": "^0.5.2",
@@ -61,6 +62,7 @@
     "set-function-length": "^1.2.0",
     "setprototypeof": "^1.2.0",
     "side-channel": "^1.0.4",
+    "socket.io": "^4.7.4",
     "statuses": "^2.0.1",
     "toidentifier": "^1.0.1",
     "type-is": "^1.6.18",
@@ -73,7 +75,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "devNodemon": "nodemon src/index.js"
+    "devNodemon": "nodemon src/js/index.js"
   },
   "keywords": [],
   "author": "",
