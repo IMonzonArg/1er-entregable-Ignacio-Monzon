@@ -35,7 +35,7 @@ app.get('/static', (req, res) => {
         {id: 4, title: "Arco 4", price: 3600, img:"https://http2.mlstatic.com/D_NQ_NP_861798-MLA72303737529_102023-O.webp"}
     ]
 
-    res.render('products', {
+    res.render('home', {
         mostrarProductos: true,
         productos: prods,
         css: 'products.css'
