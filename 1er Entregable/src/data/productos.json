@@ -6,7 +6,8 @@
     "price": 50,
     "thumbnail": "madera_thumbnail.jpg",
     "code": "ARC001",
-    "stock": 20
+    "stock": 20,
+    "img":"https://i.pinimg.com/564x/6d/57/6e/6d576e2681f86a34aa5c6ee1b0aec6eb.jpg"
   },
   {
     "id": 2,
@@ -15,7 +16,8 @@
     "price": 80,
     "thumbnail": "metal_thumbnail.jpg",
     "code": "ARC002",
-    "stock": 15
+    "stock": 15,
+    "img":"https://lh3.googleusercontent.com/proxy/Dq4_itKc6tzycEBQm2tM7Tz9-Hk9R7pzqaxNP_YI5ZAPY_77IgqHTnMgMWqscaD5_j1-m-9ALH1g5Umdv3pSgElGAYVK5hGgVU8XvqswdLPGlDi6Qj1RRwB6Oj93Gvtg"
   },
   {
     "id": 3,
@@ -24,7 +26,8 @@
     "price": 120,
     "thumbnail": "compuesto_thumbnail.jpg",
     "code": "ARC003",
-    "stock": 10
+    "stock": 10,
+    "img":"https://http2.mlstatic.com/D_NQ_NP_796527-MLA47548533453_092021-O.webp"
   },
   {
     "id": 4,
@@ -33,7 +36,8 @@
     "price": 60,
     "thumbnail": "recurvo_thumbnail.jpg",
     "code": "ARC004",
-    "stock": 25
+    "stock": 25,
+    "img":"https://http2.mlstatic.com/D_NQ_NP_861798-MLA72303737529_102023-O.webp"
   },
   {
     "id": 5,
@@ -42,7 +46,8 @@
     "price": 150,
     "thumbnail": "fibra_carbono_thumbnail.jpg",
     "code": "ARC005",
-    "stock": 12
+    "stock": 12,
+    "img": "https://resources.claroshop.com/medios-plazavip/s2/10178/4583798/6409a4616dd71-media-1600x1600.jpg?scale=500&qlty=75"
   },
   {
     "id": 6,
@@ -51,7 +56,8 @@
     "price": 100,
     "thumbnail": "caza_thumbnail.jpg",
     "code": "ARC006",
-    "stock": 18
+    "stock": 18,
+    "img":"https://http2.mlstatic.com/D_NQ_NP_786538-MLA69037977342_042023-O.webp"
   },
   {
     "id": 7,
@@ -60,7 +66,8 @@
     "price": 70,
     "thumbnail": "longbow_thumbnail.jpg",
     "code": "ARC007",
-    "stock": 22
+    "stock": 22,
+    "img":"https://http2.mlstatic.com/D_NQ_NP_942382-MLU73982405228_012024-O.webp"
   },
   {
     "id": 8,
@@ -69,7 +76,8 @@
     "price": 40,
     "thumbnail": "juvenil_thumbnail.jpg",
     "code": "ARC008",
-    "stock": 30
+    "stock": 30,
+    "img": "https://http2.mlstatic.com/D_Q_NP_891813-MLU74085620252_012024-O.webp"
   },
   {
     "id": 9,
@@ -78,7 +86,8 @@
     "price": 200,
     "thumbnail": "precision_thumbnail.jpg",
     "code": "ARC009",
-    "stock": 8
+    "stock": 8,
+    "img": "https://http2.mlstatic.com/D_NQ_NP_796527-MLA47548533453_092021-O.webp"
   },
   {
     "id": 10,
@@ -87,15 +96,7 @@
     "price": 45,
     "thumbnail": "entrenamiento_thumbnail.jpg",
     "code": "ARC010",
-    "stock": 28
-  },
-  {
-    "id": 11,
-    "title": "Arco de prueba",
-    "description": "Arco diseñado para infantiles arqueros",
-    "price": 1500,
-    "thumbnail": "infantil_thumbnail.jpg",
-    "code": "ARC849",
-    "stock": 20
+    "stock": 28,
+    "img": "https://http2.mlstatic.com/D_NQ_NP_713631-MLU73884312331_012024-O.webp"
   }
 ]

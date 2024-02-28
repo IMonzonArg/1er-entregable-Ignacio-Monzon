@@ -16,7 +16,11 @@ productsRouter.get('/', async (req, res) => {
             const limitNumber = parseInt(limit);
             if (!isNaN(limitNumber)) {
                 const prodsLimit = products.slice(0, limitNumber);
-                res.status(200).send(prodsLimit);
+                res.render('home', {
+                    mostrarProductos: true,
+                    productos: prodsLimit,
+                    css: 'products.css'
+                });
                 return;
             } else {
                 res.status(400).send("Error al consultar productos. El valor de 'limit' no es un número válido.");
@@ -24,7 +28,7 @@ productsRouter.get('/', async (req, res) => {
             }
         }
         
-        res.status(200).send(products); 
+        return res.render('home', { mostrarProductos: true, productos: products, css: 'products.css' });
     } catch(error){
         res.status(500).send(`Error interno del servidor al consultar productos: ${error}`);
     }

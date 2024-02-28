@@ -18,29 +18,12 @@ const io = new Server(server);
 app.use(express.json());
 
 app.use('/static', express.static(path.join(__dirname, 'public'))); 
-app.use('/api/products', productsRouter);
+app.use('/api/products', productsRouter, express.static(path.join(__dirname, 'public')));
 app.use('/api/cart', cartRouter);
 app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
 
 app.set("views", path.join(__dirname, "views")); 
-
-
-app.get('/static', (req, res) => {
-
-    const prods = [
-        {id: 1, title: "Arco 1", price: 1500, img:"https://http2.mlstatic.com/D_NQ_NP_716401-MLA71435395465_082023-O.webp"},
-        {id: 2, title: "Arco 2", price: 1900, img:"https://http2.mlstatic.com/D_NQ_NP_786538-MLA69037977342_042023-O.webp", },
-        {id: 3, title: "Arco 3", price: 2100, img:"https://http2.mlstatic.com/D_NQ_NP_756366-MLA31613450441_072019-O.webp"},
-        {id: 4, title: "Arco 4", price: 3600, img:"https://http2.mlstatic.com/D_NQ_NP_861798-MLA72303737529_102023-O.webp"}
-    ]
-
-    res.render('home', {
-        mostrarProductos: true,
-        productos: prods,
-        css: 'products.css'
-    });
-});
 
 io.on('connection', (socket) => {
     console.log("Conexio con Socket.io");
