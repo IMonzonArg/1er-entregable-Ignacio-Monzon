@@ -75,7 +75,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "devNodemon": "nodemon src/js/index.js"
+    "devNodemon": "nodemon src/index.js"
   },
   "keywords": [],
   "author": "",
