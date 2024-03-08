@@ -1,44 +1,73 @@
+// Imports de módulos y configuraciones
 import express from 'express';
-import productsRouter from './routes/productsRouter.js';
-import cartRouter from './routes/cartRouter.js';
-import { engine } from 'express-handlebars';
-import __dirname from './path.js'; 
-import { Server } from 'socket.io'; 
+import mongoose from 'mongoose';
+import messageModel from  './models/messages.js'
 import path from 'path';
 import upload from './config/multer.js';
+import productsRouter from './routes/productsRouter.js';
+import cartRouter from './routes/cartRouter.js';
+import userRouter from './routes/userRouter.js';
+import { error } from 'console';
+import { engine } from 'express-handlebars';
+import { Server } from 'socket.io'; 
+import __dirname from './path.js'; 
 
+
+
+
+// Creación de la aplicación Express
 const app = express();
 const PORT = 8080;
+
+// Middleware para analizar el cuerpo de la solicitud
+app.use(express.json());
+
+// Configuración del servidor y conexión a la base de datos
 const server = app.listen(PORT, () => {
     console.log(`Server on port ${PORT}`);
 });
 
 const io = new Server(server);
 
-app.use(express.json());
+mongoose.connect("mongodb+srv://ignaciolmonzon:coderhouse01@cluster0.hkfjh1t.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+.then(()=> console.log("DB is connected"))
+.catch(e=>console.log(e))
 
+// Configuración de las rutas
+app.use('/api/cart', cartRouter);
+app.use('/api/users', userRouter);
 app.use('/static', express.static(path.join(__dirname, 'public'))); 
 app.use('/api/products', productsRouter, express.static(path.join(__dirname, 'public')));
-app.use('/api/cart', cartRouter);
-app.engine('handlebars', engine());
-app.set('view engine', 'handlebars');
+app.use((req, res, next) => {
+    console.log(req.body);
+    next();
+});
 
+
+// Configuración del motor de plantillas Handlebars
+app.set('view engine', 'handlebars');
+app.engine('handlebars', engine());
 app.set("views", path.join(__dirname, "views")); 
 
+// Configuración de Socket.io
 io.on('connection', (socket) => {
     console.log("Conexio con Socket.io");
 
-    socket.on('movimiento', info => {
-        console.log(info);
-    });
+    socket.on('mensaje', async ( mensaje ) => {
 
-    socket.on('rendirse', info => {
-        console.log(info);
-        socket.emit('mensaje-jugador', "Te has rendido");
-        socket.broadcast.emit('rendicion', "El jugador se rindio");
+        try {
+            await messageModel.create(mensaje)
+            const mensajes = await messageModel.find()
+            console.log( mensaje );
+            io.emit('mensajeLogs', mensajes)
+
+        } catch(e){
+            io.emit('mensajeLogs', e)
+        }
     });
 });
 
+// Ruta para manejar la subida de archivos
 app.post('/upload', upload.single('product'), (req, res) => {
     try {
         console.log(req.file);

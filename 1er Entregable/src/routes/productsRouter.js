@@ -1,16 +1,13 @@
+import { productModel } from "../models/product.js";
 import { Router } from "express";
-import { ProductManager } from '../config/productManager.js';
 
-const productManager = new ProductManager('../data/productos.json');
 const productsRouter = Router()
-
-
 productsRouter.get('/', async (req, res) => {
     try {
         const { limit } = req.query;
         console.log(limit);
     
-        const products = await productManager.getProducts();
+        const products = await productModel.find().lean();
         
         if (limit !== undefined) {
             const limitNumber = parseInt(limit);
@@ -39,11 +36,8 @@ productsRouter.get('/', async (req, res) => {
     productsRouter.get('/:pid', async (req, res) => {
         try {
             const { id } = req.params;
-            const product = await productManager.getProductById(id);
-            if( id )
+            const product = await productModel.findById(id);
             res.status(200).send(product)
-            else
-                res.status(404).send("Producto no existente")
         } catch(error) {
             res.status(500).send(`Error interno del servidor al consultar producto: ${error}`);
         }
@@ -52,11 +46,8 @@ productsRouter.get('/', async (req, res) => {
     productsRouter.post('/', async (req, res) => {
         try {
             const prod = req.body
-            const message = await productManager.addProduct(prod)
-            if(message == "Producto agregado correctamente" )
-                res.status(200).send(message)
-            else
-                res.status(400).send(message)
+            const message = await productModel.create(prod)
+                res.status(201).send(message)
         } catch(error) {
             res.status(500).send(`Error interno del servidor al crear producto: ${error}`);
         }
@@ -67,11 +58,9 @@ productsRouter.get('/', async (req, res) => {
         try {
             const { id } = req.params;
             const prodUpdate = req.body;
-            const message = await productManager.updateProduct(id,prodUpdate)
-            if(message == "Producto actualizado correctamente" )
-            res.status(200).send(message)
-            else
-                res.status(404).send(message)
+            const prod = await productModel.findByIdAndUpdate(id, prodUpdate)
+            res.status(200).send(prod)
+
         } catch(error) {
             res.status(500).send(`Error interno del servidor al actualizar producto: ${error}`);
         }
@@ -80,11 +69,9 @@ productsRouter.get('/', async (req, res) => {
     productsRouter.delete('/:id', async (req, res) => {
         try {
             const { id } = req.params;
-            const message = await productManager.deleteProduct(id)
-            if(message == "Producto eliminado correctamente" )
+            const message = await productModel.findByIdAndDelete(id)
             res.status(200).send(message)
-            else
-                res.status(404).send(message)
+            
         } catch(error) {
             res.status(500).send(`Error interno del servidor al eliminar producto: ${error}`);
         }
