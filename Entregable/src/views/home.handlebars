@@ -1,0 +1,15 @@
+<h1>Esto es un h1 de prueba</h1>
+
+{{#if mostrarProductos}}
+{{#each productos}}
+<div>
+    <p>Titulo: {{this.title}} </p>
+    <p>Descripcion: {{this.description}} </p>
+    <p>Precio: {{this.price}} </p>
+    <p>Stock:{{this.stock}} </p>
+    <img src="{{this.img}}" alt="imagen de {{this.title}}"></img>
+</div>
+{{/each}}
+{{else}}
+    <p>Es falso</p>
+{{/if}}
