@@ -5,11 +5,8 @@ import { Router } from "express";
 const productsRouter = Router()
 productsRouter.get('/', async (req, res) => {
     try {
-        const { limit, page, filter, ord } = req.query;
+        const { limit = 10, page = 1, filter, ord } = req.query
         let metFilter
-        
-        const pag = page !== undefined ? page : 1
-        const limi = limit !== undefined ? limit : 10
 
         if(filter == "true" || filter == "false") {
             metFilter = "status"
