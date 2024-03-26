@@ -13,16 +13,6 @@ userRouter.get('/',async (req, res) => {
     }
 })
 
-userRouter.post('/', async (req,res)=>{
-    try{
-        console.log(req.body)
-        const {first_name, last_name, password, age, email} = req.body
-        const resultado = await userModel.create({first_name, last_name, password, age, email })
-        res.status(201).send(resultado)
-    } catch(e){
-        res.status(500).send(`Error al crear users: ${e.message}`);
 
-    }
-})
 
 export default userRouter

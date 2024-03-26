@@ -1,16 +1,23 @@
 // Imports de módulos y configuraciones
 import express from 'express';
 import mongoose from 'mongoose';
-import messageModel from  './models/messages.js';
+import session from 'express-session';
+import cookieParser from 'cookie-parser';
+import MongoStore from 'connect-mongo';
+import passport from 'passport';
 import path from 'path';
 import upload from './config/multer.js';
+import sessionRouter from './routes/sessionRouter.js';
+import messageModel from  './models/messages.js';
 import productsRouter from './routes/productsRouter.js';
 import cartRouter from './routes/cartRouter.js';
 import userRouter from './routes/userRouter.js';
+import initializePassport from './config/passport/passport.js';
 import { engine } from 'express-handlebars';
 import { Server } from 'socket.io'; 
 import __dirname from './path.js'; 
-import cookieParser from 'cookie-parser';
+
+
 
 // -----------------------------------------------------------------------------------------------------------------
 // Creación de la aplicación Express
@@ -21,6 +28,15 @@ const PORT = 8080;
 // Middleware para analizar el cuerpo de la solicitud
 app.use(express.json());
 app.use(cookieParser());
+app.use(session({
+    secret: "coderSecret",
+    resave: true,
+    store: MongoStore.create({
+        mongoUrl: "mongodb+srv://ignaciolmonzon:coderhouse01@cluster0.hkfjh1t.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",        
+        ttl: 100
+    }),
+    saveUninitialized:true
+}))
 
 // -----------------------------------------------------------------------------------------------------------------
 // Configuración del servidor y conexión a la base de datos
@@ -36,6 +52,9 @@ mongoose.connect("mongodb+srv://ignaciolmonzon:coderhouse01@cluster0.hkfjh1t.mon
 
 // -----------------------------------------------------------------------------------------------------------------
 // Configuración de las rutas
+app.use('/', (req,res) => {
+    res.status(200).send("Bienvenido/a")
+})
 app.use('/api/cart', cartRouter);
 app.use('/api/users', userRouter);
 app.use('/static', express.static(path.join(__dirname, 'public'))); 
@@ -44,6 +63,8 @@ app.use((req, res, next) => {
     console.log(req.body);
     next();
 });
+app.use('/api/session', sessionRouter)
+
 
 // -----------------------------------------------------------------------------------------------------------------
 // Routes para cookies
@@ -60,16 +81,39 @@ app.get('/deleteCookie', (req,res) => {
 });
 
 // -----------------------------------------------------------------------------------------------------------------
-// Session cookies
+// Session
 app.get('/session', (req,res) => {
-    // COMPLETAR
+    if(req.session.counter) {
+        req.session.counter++;
+        res.send(`Sos el usuario N° ${req.session.counter} en ingresar a la pagina `)
+    }else {
+        req.session.counter = 1
+        res.send("Sos el primer usuario en la web")
+    }
 });
+
+app.post('/login', (req,res) => {
+    const {email, password} = req.body
+
+    if(email == "admin@admin.com" && password == "1234") {
+        req.session.email = email
+        req.session.password = password
+    } 
+    console.log(req.session)
+    res.send("Login")
+})
 
 // -----------------------------------------------------------------------------------------------------------------
 // Configuración del motor de plantillas Handlebars
 app.set('view engine', 'handlebars');
 app.engine('handlebars', engine());
 app.set("views", path.join(__dirname, "views")); 
+
+initializePassport()
+    app.use(passport.initialize()),
+    app.use(passport.session())
+
+
 
 // -----------------------------------------------------------------------------------------------------------------
 // Configuración de Socket.io
