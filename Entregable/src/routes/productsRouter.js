@@ -1,26 +1,12 @@
-import { productModel } from "../models/product.js";
 import { Router } from "express";
-
+import { getProducts, getProduct, createProduct, updateProduct, deleteProduct } from "../controllers/productController"; 
 
 const productsRouter = Router()
 productsRouter.get('/', async (req, res) => {
     try {
         const { limit = 10, page = 1, filter, ord } = req.query
-        let metFilter
 
-        if(filter == "true" || filter == "false") {
-            metFilter = "status"
-        } else {
-            if (filter !== undefined)
-                metFilter = "category"
-        }
-
-        const query = metFilter != undefined ? {[metFilter]: filter } : {};
-        const ordQuery = ord !== undefined ? { price : ord } : {};
-
-
-        const products = await productModel.paginate(query, { limit: limi, page: pag, sort: ordQuery })
-
+        const prods = await getProducts(limit = 10, page = 1, filter, ord )
 
         res.status(200).send(products)
     } catch(error){
@@ -33,8 +19,11 @@ productsRouter.get('/', async (req, res) => {
     productsRouter.get('/:pid', async (req, res) => {
         try {
             const { id } = req.params;
-            const product = await productModel.findById(id);
-            res.status(200).send(product)
+            const prod = await getProduct(id)
+            if(prod) 
+                res.status(200).send(product)
+            else 
+                res.status(404).send('No se ha encontrado el producto')
         } catch(error) {
             res.status(500).send(`Error interno del servidor al consultar producto: ${error}`);
         }
@@ -43,7 +32,7 @@ productsRouter.get('/', async (req, res) => {
     productsRouter.post('/', async (req, res) => {
         try {
             const prod = req.body
-            const message = await productModel.create(prod)
+            const message = await createProduct(product)
                 res.status(201).send(message)
         } catch(error) {
             res.status(500).send(`Error interno del servidor al crear producto: ${error}`);
@@ -55,9 +44,8 @@ productsRouter.get('/', async (req, res) => {
         try {
             const { id } = req.params;
             const prodUpdate = req.body;
-            const prod = await productModel.findByIdAndUpdate(id, prodUpdate)
+            const prod = await updateProduct(id, prodUpdate)
             res.status(200).send(prod)
-
         } catch(error) {
             res.status(500).send(`Error interno del servidor al actualizar producto: ${error}`);
         }
@@ -66,7 +54,7 @@ productsRouter.get('/', async (req, res) => {
     productsRouter.delete('/:id', async (req, res) => {
         try {
             const { id } = req.params;
-            const message = await productModel.findByIdAndDelete(id)
+            const message = await deleteProduct(id)
             res.status(200).send(message)
             
         } catch(error) {

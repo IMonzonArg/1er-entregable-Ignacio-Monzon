@@ -52,9 +52,6 @@ mongoose.connect("mongodb+srv://ignaciolmonzon:coderhouse01@cluster0.hkfjh1t.mon
 
 // -----------------------------------------------------------------------------------------------------------------
 // Configuración de las rutas
-app.use('/', (req,res) => {
-    res.status(200).send("Bienvenido/a")
-})
 app.use('/api/cart', cartRouter);
 app.use('/api/users', userRouter);
 app.use('/static', express.static(path.join(__dirname, 'public'))); 
