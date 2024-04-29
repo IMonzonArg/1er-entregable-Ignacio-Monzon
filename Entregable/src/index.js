@@ -13,6 +13,7 @@ import productsRouter from './routes/productsRouter.js';
 import cartRouter from './routes/cartRouter.js';
 import userRouter from './routes/userRouter.js';
 import initializePassport from './config/passport/passport.js';
+import varenv from './config/dotenv.js';
 import { engine } from 'express-handlebars';
 import { Server } from 'socket.io'; 
 import __dirname from './path.js'; 
@@ -20,23 +21,23 @@ import __dirname from './path.js';
 
 
 // -----------------------------------------------------------------------------------------------------------------
-// Creación de la aplicación Express
+// Configuraciones o declaraciones
 const app = express();
 const PORT = 8080;
 
 // -----------------------------------------------------------------------------------------------------------------
 // Middleware para analizar el cuerpo de la solicitud
 app.use(express.json());
-app.use(cookieParser());
 app.use(session({
-    secret: "coderSecret",
+    secret: varenv.session_secret,
     resave: true,
     store: MongoStore.create({
-        mongoUrl: "mongodb+srv://ignaciolmonzon:coderhouse01@cluster0.hkfjh1t.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",        
+        mongoUrl: varenv.mongo_url,        
         ttl: 100
     }),
     saveUninitialized:true
 }))
+app.use(cookieParser(varenv.cookies_secret));
 
 // -----------------------------------------------------------------------------------------------------------------
 // Configuración del servidor y conexión a la base de datos
@@ -46,7 +47,7 @@ const server = app.listen(PORT, () => {
 
 const io = new Server(server);
 
-mongoose.connect("mongodb+srv://ignaciolmonzon:coderhouse01@cluster0.hkfjh1t.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+mongoose.connect(varenv.mongo_url)
 .then(()=> console.log("DB is connected"))
 .catch(e=>console.log(e));
 

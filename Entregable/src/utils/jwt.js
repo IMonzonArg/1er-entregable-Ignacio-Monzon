@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken'
+import varenv  from '../varenv.js';
 
 export const generateToken = (user) => {
     
