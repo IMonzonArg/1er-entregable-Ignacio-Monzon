@@ -1,6 +1,8 @@
 import productModel from '../models/product.js'
 
-export const getProducts = async (limit, page, filter, ord ) => {
+export const getProducts = async (req, res) => {
+    try {
+        const { limit, page, filter, ord } = req.query;
     let metFilter
     const pag = page !== undefined ? page : 1;
     const limi = limit !== undefined ? limit : 10;
@@ -15,28 +17,56 @@ export const getProducts = async (limit, page, filter, ord ) => {
     const query = metFilter != undefined ? {[metFilter]: filter } : {};
     const ordQuery = ord !== undefined ? { price : ord } : {};
 
-    const products = await productModel.paginate(query, { limit: limi, page: pag, sort: ordQuery })
+    const prods = await productModel.paginate(query, { limit: limi, page: pag, sort: ordQuery })
     return prods
+}  catch (error) {
+    res.status(500).render('templates/error', {
+        error: error,
+    });
+}
 }
 
-export const getProduct = async (id) => {
-        const product = await productModel.findById(id);
-        return product
+export const getProduct = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const prod = await productModel.findById(id)
+        if(prod) 
+            res.status(200).send(product)
+        else 
+            res.status(404).send('No se ha encontrado el producto')
+    } catch(error) {
+        res.status(500).send(`Error interno del servidor al consultar producto: ${error}`);
+    }
 }
 
-export const createProduct = async () => {
-    const message = await productModel.create(prod)
-    return message
+export const createProduct = async (req, res)  => {
+    try {
+        const prod = req.body
+        const message = await productModel.create(prod)
+            res.status(201).send(message)
+    } catch(error) {
+        res.status(500).send(`Error interno del servidor al crear producto: ${error}`);
+    }
 }
 
-
-
-export const updateProduct = async (id, prodUpdate) => {
-    const message = await productModel.findByIdAndUpdate(id, prodUpdate)
-    return message
+export const updateProduct = async (req, res) => {
+    try {
+        const { id } = req.params.pid;
+        const prodUpdate = req.body;
+        const prod = await productModel.findByIdAndUpdate(id, prodUpdate)
+        res.status(200).send(prod)
+    } catch(error) {
+        res.status(500).send(`Error interno del servidor al actualizar producto: ${error}`);
+    }
 }
 
-export const deleteProduct = async (id) => {
-    const message = await productModel.findByIdAndDelete(id)
-    return message
+export const deleteProduct = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const message = await productModel.findByIdAndDelete(id)
+        res.status(200).send(message)
+        
+    } catch(error) {
+        res.status(500).send(`Error interno del servidor al eliminar producto: ${error}`);
+    }
 }
