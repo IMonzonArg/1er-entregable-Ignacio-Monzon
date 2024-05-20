@@ -165,4 +165,10 @@ const createRandomGame = () => {
 for (let i = 0; i < 100; i++) {
     games.push(createRandomGame())
 }
+
+app.get('/mockingproducts', (req, res) => {
+    res.json(games);
+});
+
+
 export default app;
