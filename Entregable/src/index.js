@@ -13,6 +13,7 @@ import productsRouter from './routes/productsRouter.js';
 import cartRouter from './routes/cartRouter.js';
 import userRouter from './routes/userRouter.js';
 import initializePassport from './config/passport/passport.js';
+import { faker } from '@faker-js/faker'
 import varenv from './config/dotenv.js';
 import { engine } from 'express-handlebars';
 import { Server } from 'socket.io'; 
@@ -20,10 +21,13 @@ import __dirname from './path.js';
 
 
 
+
+
 // -----------------------------------------------------------------------------------------------------------------
 // Configuraciones o declaraciones
 const app = express();
 const PORT = 8080;
+const games = []
 
 // -----------------------------------------------------------------------------------------------------------------
 // Middleware para analizar el cuerpo de la solicitud
@@ -142,4 +146,23 @@ app.post('/upload', upload.single('product'), (req, res) => {
     }
 });
 
+// -----------------------------------------------------------------------------------------------------------------
+// Mocks de juegos
+
+const createRandomGame = () => {
+    return {
+        username : faker.commerce.product(),
+        description: faker.commerce.productDescription(),
+        number: faker.number.int({ max: 100 }),
+        category: faker.commerce.department(),
+        status: faker.datatype.boolean(),
+        code: faker.string.uuid(),
+        price: faker.commerce.price({ min: 100, max: 200 }),
+
+    }
+}
+
+for (let i = 0; i < 100; i++) {
+    games.push(createRandomGame())
+}
 export default app;

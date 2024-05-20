@@ -9,8 +9,7 @@ const cookieExtractor = req => {
 }
 
 const jwtOptions = {
-    jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
-    //jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     //jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: varenv.jwt_secret
 }

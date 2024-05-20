@@ -49,5 +49,8 @@ export const sessionGithub = async (req, res) => {
 }
 
 export const testJWT = async (req, res) => {
-    res.status(200).send("")
+    if (req.user.rol == 'User')
+        res.status(403).send('Usuario no autorizado')
+    else
+        res.status(200).send("")
 }

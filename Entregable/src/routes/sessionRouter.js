@@ -14,11 +14,9 @@ sessionRouter.get('/githubSession', passport.authenticate('github'), sessionGith
 
 sessionRouter.get('/logout', logout)
 
-sessionRouter.get('/testJWT', passport.authenticate('jwt', testJWT))
+sessionRouter.get('/testJWT', passport.authenticate('jwt',{session: false}), testJWT)
 
-sessionRouter.get('/current', passport.authenticate('jwt'), async (req, res) => {
-console.log(req)
-res.status(200).send("usuario logueado")
+sessionRouter.get('/current', passport.authenticate('jwt'), async (req, res) => { res.status(200).send("usuario logueado")
 });
 
 export default sessionRouter;
