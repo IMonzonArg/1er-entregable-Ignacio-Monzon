@@ -18,7 +18,7 @@ import varenv from './config/dotenv.js';
 import { engine } from 'express-handlebars';
 import { Server } from 'socket.io'; 
 import __dirname from './path.js'; 
-
+import { addLoger } from './utils/logger.js';
 
 
 
@@ -32,6 +32,7 @@ const games = []
 // -----------------------------------------------------------------------------------------------------------------
 // Middleware para analizar el cuerpo de la solicitud
 app.use(express.json());
+app.use(addLoger)
 app.use(session({
     secret: varenv.session_secret,
     resave: true,
@@ -42,6 +43,7 @@ app.use(session({
     saveUninitialized:true
 }))
 app.use(cookieParser(varenv.cookies_secret));
+
 
 // -----------------------------------------------------------------------------------------------------------------
 // Configuración del servidor y conexión a la base de datos
@@ -141,7 +143,7 @@ app.post('/upload', upload.single('product'), (req, res) => {
         console.log(req.file);
         res.status(200).send("Imagen cargada correctamente");
     } catch (error) {
-        console.log(error);
+        req.logger.error(`${req.method} es ${req.url} - ${new Date().toLocaleDateString()}`)
         res.status(500).send({ message: "Error al subir la imagen" });
     }
 });
@@ -168,6 +170,21 @@ for (let i = 0; i < 100; i++) {
 
 app.get('/mockingproducts', (req, res) => {
     res.json(games);
+});
+
+// -----------------------------------------------------------------------------------------------------------------
+// Logger
+
+app.get('/loggerTest', (req, res) => {
+    try {
+        req.logger.fatal('Este es un error fatal para testeos de fatal');
+        // Log an error
+        req.logger.error('Este es un error fatal para testeos de error');
+
+        res.status(200).send('Los errores fueron almacenados en el logger');
+    } catch (error) {
+        res.status(500).send('Error al loggear los tests');
+    }
 });
 
 

@@ -1,5 +1,6 @@
 import cartModel from "../models/cart.js"
 import productModel from "../models/product.js";
+import ticketModel from "../models/ticket.js" 
 
 export const getCart = async (req,res) => {
     try {
@@ -7,6 +8,7 @@ export const getCart = async (req,res) => {
         const cart = await cartModel.findOne({_id: cartId});
         res.status(200).send(cart);
     } catch(error){
+        req.logger.fatal(`${req.method} es ${req.url} - ${new Date().toLocaleDateString()}`)
         res.status(500).send(`Error interno del servidor al consultar carrito: ${error}`);
     }
 }
@@ -16,6 +18,7 @@ export const createCart = async (req,res) => {
         const newCartId = await  cartModel.create({products: []});
         res.status(201).send({id: newCartId})
     } catch(error){
+        req.logger.fatal(`${req.method} es ${req.url} - ${new Date().toLocaleDateString()}`)
         res.status(500).send( `Error interno del servidor al crear un nuevo carrito: ${error}`)
     }
 }
@@ -48,6 +51,7 @@ export const insertProductCart = async (req,res) => {
             res.status(403).send("Usuario no autorizado")
         }
     } catch (error) {
+        req.logger.fatal(`${req.method} es ${req.url} - ${new Date().toLocaleDateString()}`)
         res.status(500).send(`Error interno del servidor al crear producto: ${error}`);
     }
 }
@@ -69,6 +73,7 @@ export const deleteProduct = async (req, res) => {
             res.status(400).send("El producto no se encuentra en el carrito");
         }
     } catch (error) {
+        req.logger.fatal(`${req.method} es ${req.url} - ${new Date().toLocaleDateString()}`)
         res.status(500).send(`Error interno del servidor al eliminar producto: ${error}`);
     }
 }
@@ -89,7 +94,7 @@ export const updateCart = async (req, res) => {
         res.status(200).send("El carrito fue actualizado correctamente");
 
     } catch (error) {
-        console.error("Error interno del servidor al actualizar el carrito:", error);
+        req.logger.error(`${req.method} es ${req.url} - ${new Date().toLocaleDateString()}`)
         res.status(500).send(`Error interno del servidor al actualizar el carrito: ${error}`);
     }
 }
@@ -118,7 +123,7 @@ export const updateProductToCart = async (req, res) => {
         
         res.status(200).send(cart);
     } catch (error) {
-        console.error("Error interno del servidor al actualizar producto:", error);
+        req.logger.error(`${req.method} es ${req.url} - ${new Date().toLocaleDateString()}`)
         res.status(500).send(`Error interno del servidor al actualizar producto: ${error}`);
     }
 }
@@ -138,6 +143,7 @@ export const cleanCart = async (req, res) => {
         await cart.save();
         res.status(200).send("El carrito se vacio correctamente");
     } catch (error) {
+        req.logger.fatal(`${req.method} es ${req.url} - ${new Date().toLocaleDateString()}`)
         res.status(500).send(`Error interno del servidor al limpiar carrito: ${error}`);
     }
 }
@@ -155,15 +161,24 @@ export const createTicket = async (req, res) => {
                     prodSinStock.push(producto)
                 }
         })
-        if(prodSinStock.length == 0) {
-            //FINALIZAR COMPRA
+            if(prodSinStock.length == 0) {
+            const totalPrice = cart.products.reduce((a,b) => (a.price * a.stock) + (b.price * b.quantity), 0) 
+            const newTicket = await ticketModel.create({
+                code: crypto.randomUUID(),
+                purchaser: req.user.email,
+                ammount: totalPrice,
+                products: cart.products
+            })
+            //VACIAR CARRITO
+            res.status(200).send(newTicket)
         } else {
-            //PRODUCTO SIN STOCK
+            //RETORNAR PRODUCTO SIN STOCK
         }
         } else {
             res.status(404).send("Carrito no existe")
         }
     } catch (e){
+        req.logger.fatal(`${req.method} es ${req.url} - ${new Date().toLocaleDateString()}`)
         res.status(500).send(e)
     }
 

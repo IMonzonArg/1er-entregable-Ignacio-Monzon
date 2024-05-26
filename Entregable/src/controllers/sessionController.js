@@ -14,6 +14,7 @@ export const login = async (req, res) => {
         res.status(200).send("Inicio de sesión correcto")
 
     } catch(e) {
+        req.logger.error(`${req.method} es ${req.url} - ${new Date().toLocaleDateString()}`)
         res.status(500).send("Error al loguear")
     }
 }
@@ -25,6 +26,7 @@ export const register = async (req, res) => {
         } 
         res.status(200).send("Usuario creado correctamente")
     } catch(e){
+        req.logger.error(`${req.method} es ${req.url} - ${new Date().toLocaleDateString()}`)
         res.status(500).send(`Error al registrar el usuario`);
     }
 }
@@ -33,6 +35,7 @@ export const logout = async (req, res) => {
     req.session.destroy(function (e) {
         if (e) {
             console.log(e)
+            req.logger.error(`${req.method} es ${req.url} - ${new Date().toLocaleDateString()}`)
         } else {
             res.status(200).redirect("/")
         }

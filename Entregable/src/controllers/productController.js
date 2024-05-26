@@ -33,8 +33,10 @@ export const getProduct = async (req, res) => {
         if(prod) 
             res.status(200).send(product)
         else 
+            req.logger.warning(`${req.method} es ${req.url} - ${new Date().toLocaleDateString()}`)
             res.status(404).send('No se ha encontrado el producto')
     } catch(error) {
+        req.logger.fatal(`${req.method} es ${req.url} - ${new Date().toLocaleDateString()}`)
         res.status(500).send(`Error interno del servidor al consultar producto: ${error}`);
     }
 }
@@ -46,10 +48,12 @@ export const createProduct = async (req, res)  => {
             const message = await productModel.create(prod)
             res.status(201).send(message)
         } else {
+            req.logger.warning(`${req.method} es ${req.url} - ${new Date().toLocaleDateString()}`)
             res.status(403).send("Usuario no autorizado")
         }
 
     } catch(error) {
+        req.logger.fatal(`${req.method} es ${req.url} - ${new Date().toLocaleDateString()}`)
         res.status(500).send(`Error interno del servidor al crear producto: ${error}`);
     }
 }
@@ -63,8 +67,10 @@ export const updateProduct = async (req, res) => {
             res.status(200).send(prod)
         } else {
             res.status(403).send("Usuario no autorizado") 
+            req.logger.warning(`${req.method} es ${req.url} - ${new Date().toLocaleDateString()}`)
         }
     } catch(error) {
+        req.logger.fatal(`${req.method} es ${req.url} - ${new Date().toLocaleDateString()}`)
         res.status(500).send(`Error interno del servidor al actualizar producto: ${error}`);
     }
 }
@@ -77,10 +83,12 @@ export const deleteProduct = async (req, res) => {
             res.status(200).send(message)
         } else {
             res.status(403).send("Usuario no autorizado")
+            req.logger.warning(`${req.method} es ${req.url} - ${new Date().toLocaleDateString()}`)
         }
 
         
     } catch(error) {
+        req.logger.fatal(`${req.method} es ${req.url} - ${new Date().toLocaleDateString()}`)
         res.status(500).send(`Error interno del servidor al eliminar producto: ${error}`);
     }
 }
