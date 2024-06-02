@@ -31,6 +31,10 @@ const userSchema = new Schema({
     cart_Id: {
         type: Schema.Types.ObjectId, 
         ref:'carts'
+    },
+    isPremium: {
+        type: Boolean,
+        default: false
     }
 });
 
@@ -51,5 +55,13 @@ userSchema.pre('findOne', async function(next) {
 
     }
 })
+
+userSchema.methods.precioConDescuento = function(precioTotal) {
+    if (this.esPremium) {
+        return precioTotal * 0.9; // Aplica un descuento del 10%
+    }
+    return precioTotal;
+};
+
 
 export const userModel = model("users", userSchema)

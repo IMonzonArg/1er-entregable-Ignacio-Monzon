@@ -17,12 +17,9 @@ const ticketSchema = new Schema ({
         type: String,
         required: true
     },
-    products: [
-            {
-            type: Schema.Types.ObjectId,
-            ref:'products'
-        }
-    ]
+    products: {
+        type: Object
+    }
 })
 
 const ticketModel = model('ticket', ticketSchema)

@@ -25,7 +25,7 @@ export const createCart = async (req,res) => {
 
 export const insertProductCart = async (req,res) => {
     try {
-        if (req.user.rol == "User"){
+        if (req.user.rol == "Admin"){
             
         const pId = req.params.pid;
         const cartId = req.params.cid;
@@ -158,25 +158,40 @@ export const createTicket = async (req, res) => {
             cart.products.forEach(async (prod) => {
                 let producto = await productModel.findById(prod.id_prod)
                 if(producto.stock - prod.quantity < 0 ) {
-                    prodSinStock.push(producto)
+                    prodSinStock.push(producto.id)
                 }
         })
             if(prodSinStock.length == 0) {
-            const totalPrice = cart.products.reduce((a,b) => (a.price * a.stock) + (b.price * b.quantity), 0) 
+            //const totalPrice = cart.products.reduce((a,b) => (a.id_prod.price * a.quantity) + (b.id_prod.price * b.quantity), 0) 
+            const aux = [...cart.products]
             const newTicket = await ticketModel.create({
                 code: crypto.randomUUID(),
                 purchaser: req.user.email,
                 ammount: totalPrice,
                 products: cart.products
             })
-            //VACIAR CARRITO
+            cart.products.forEach(async (prod) => {
+            /*await productModel.findByIdAndUpdate(prod.id_prod, {
+                stock: stock - prod.quantity
+                })*/
+            })
+            await cartModel.findByIdAndUpdate(cartId,{
+                products: []
+            })
             res.status(200).send(newTicket)
         } else {
-            //RETORNAR PRODUCTO SIN STOCK
+            prodSinStock.forEach((prodId) => {
+                cart.products = cart.products.filter (pro => pro.id_prod !== prodId)
+            })
+            await cartModel.findByIdAndUpdate(cartId,{
+                products: cart.products
+            }) 
+            res.status(400).send(`Productos sin stock: ${prodSinStock}`)
         }
-        } else {
-            res.status(404).send("Carrito no existe")
-        }
+    } else {
+        res.status(404).send("Carrito no existe")
+    }
+        res.status(200).send(newTicket)
     } catch (e){
         req.logger.fatal(`${req.method} es ${req.url} - ${new Date().toLocaleDateString()}`)
         res.status(500).send(e)
