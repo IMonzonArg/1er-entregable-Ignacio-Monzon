@@ -1,0 +1,151 @@
+openapi: 3.0.0
+info:
+  title: API de Usuarios
+  description: API para gestionar los usuarios de la tienda.
+  version: 1.0.0
+
+paths:
+  /api/users/:
+    get:
+      summary: Obtener todos los usuarios
+      tags: 
+        - Users
+      responses:
+        '200':
+          description: Usuarios obtenidos correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/User'
+        '500': 
+          description: Error al obtener usuarios
+
+  /api/users/{id}:
+    get:
+      summary: Obtener un usuario por ID
+      tags: 
+        - Users
+      parameters: 
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del usuario a buscar
+      responses: 
+        '200':
+          description: Usuario obtenido correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: Usuario no encontrado
+        '500':
+          description: Error al obtener usuario
+
+    put:
+      summary: Actualizar un usuario por ID
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del usuario a actualizar
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              first_name:
+                type: string
+              last_name:
+                type: string
+              password:
+                type: string
+              age:
+                type: number
+              email:
+                type: string
+              rol:
+                type: string
+              isPremium:
+                type: boolean
+      responses:
+        '200':
+          description: Usuario actualizado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: Usuario no encontrado
+        '500':
+          description: Error al actualizar usuario
+
+    delete:
+      summary: Eliminar un usuario por ID
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del usuario a eliminar
+      responses:
+        '200':
+          description: Usuario eliminado correctamente
+        '404':
+          description: Usuario no encontrado
+        '500':
+          description: Error al eliminar usuario
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        first_name:
+          type: string
+          description: Nombre del usuario
+        last_name:
+          type: string
+          description: Apellido del usuario
+        password:
+          type: string
+          description: Contraseña del usuario
+        age:
+          type: number
+          description: Edad del usuario
+        email:
+          type: string
+          description: Email del usuario
+          unique: true
+        rol:
+          type: string
+          description: Rol del usuario
+          default: "User"
+        cart_id:
+          type: string
+          description: ID del carrito asociado al usuario
+        isPremium:
+          type: boolean
+          description: Indica si el usuario es Premium
+          default: false
+      example:
+        first_name: "Pedro"
+        last_name: "Parker"
+        password: "password123"
+        age: 30
+        email: "pedro@parker.com"
+        rol: "User"
+        cart_id: "60d5f60b4b5d5b6c5f4f0e0d"
+        isPremium: false

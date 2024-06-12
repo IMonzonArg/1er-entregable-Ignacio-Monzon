@@ -1,0 +1,200 @@
+openapi: 3.0.0
+info:
+  title: API de Productos
+  description: API para gestionar los productos de la tienda.
+  version: 1.0.0
+
+paths:
+  /api/products/:
+    get:
+      summary: Obtener todos los productos
+      tags:
+        - Products
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: Límite de productos por página
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: Número de la página a consultar
+        - name: filter
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filtro de productos (por categoría o estado)
+        - name: ord
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Orden de los productos (por precio)
+      responses:
+        '200':
+          description: Productos obtenidos correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        '500':
+          description: Error al obtener productos
+
+    post:
+      summary: Crear un nuevo producto
+      tags:
+        - Products
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '201':
+          description: Producto creado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '403':
+          description: Usuario no autorizado
+        '500':
+          description: Error al crear producto
+
+  /api/products/{id}:
+    get:
+      summary: Obtener un producto por ID
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del producto a buscar
+      responses:
+        '200':
+          description: Producto obtenido correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Producto no encontrado
+        '500':
+          description: Error al obtener producto
+
+    put:
+      summary: Actualizar un producto por ID
+      tags:
+        - Products
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del producto a actualizar
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: Producto actualizado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '403':
+          description: Usuario no autorizado
+        '404':
+          description: Producto no encontrado
+        '500':
+          description: Error al actualizar producto
+
+    delete:
+      summary: Eliminar un producto por ID
+      tags:
+        - Products
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del producto a eliminar
+      responses:
+        '200':
+          description: Producto eliminado correctamente
+        '403':
+          description: Usuario no autorizado
+        '404':
+          description: Producto no encontrado
+        '500':
+          description: Error al eliminar producto
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Título del producto
+        description:
+          type: string
+          description: Descripción del producto
+        stock:
+          type: integer
+          description: Cantidad de stock del producto
+        category:
+          type: string
+          description: Categoría del producto
+        status:
+          type: boolean
+          description: Estado del producto (activo/inactivo)
+          default: true
+        code:
+          type: string
+          description: Código único del producto
+        price:
+          type: number
+          description: Precio del producto
+        thumbnail:
+          type: array
+          items:
+            type: string
+          description: URLs de las imágenes del producto
+      example:
+        title: "Comida para perros"
+        description: "Comida rica y nutritiva para perros de todas las razas"
+        stock: 100
+        category: "Alimentos"
+        status: true
+        code: "CPD123"
+        price: 19.99
+        thumbnail: ["http://example.com/image1.jpg", "http://example.com/image2.jpg"]
+
+securitySchemes:
+  bearerAuth:
+    type: http
+    scheme: bearer
+    bearerFormat: JWT

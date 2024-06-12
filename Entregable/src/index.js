@@ -7,6 +7,8 @@ import MongoStore from 'connect-mongo';
 import passport from 'passport';
 import path from 'path';
 import upload from './config/multer.js';
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUiExpress from 'swagger-ui-express'
 import sessionRouter from './routes/sessionRouter.js';
 import messageModel from  './models/messages.js';
 import productsRouter from './routes/productsRouter.js';
@@ -28,6 +30,18 @@ import { addLoger } from './utils/logger.js';
 const app = express();
 const PORT = 8080;
 const games = []
+const swaggerOptions = {
+    definition: {
+        openapi: '3.1.0',
+        info: {
+            title: 'Documentacion de mi aplicacion',
+            description: 'Descripcion de documentacion'
+        },
+        apis: [`${__dirname}/docs/**/*.yaml`]
+    }
+}
+
+const specs = swaggerJSDoc(swaggerOptions)
 
 // -----------------------------------------------------------------------------------------------------------------
 // Middleware para analizar el cuerpo de la solicitud
@@ -59,6 +73,7 @@ mongoose.connect(varenv.mongo_url)
 
 // -----------------------------------------------------------------------------------------------------------------
 // Configuración de las rutas
+app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 app.use('/api/cart', cartRouter);
 app.use('/api/users', userRouter);
 app.use('/static', express.static(path.join(__dirname, 'public'))); 

@@ -1,0 +1,254 @@
+openapi: 3.0.0
+info:
+  title: API de Carrito de Compras
+  description: API para gestionar el carrito de compras de los usuarios.
+  version: 1.0.0
+
+paths:
+  /api/carts/:
+    post:
+      summary: Crear un nuevo carrito
+      tags:
+        - Carts
+      responses:
+        '201':
+          description: Carrito creado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        '500':
+          description: Error al crear carrito
+
+  /api/carts/{cid}:
+    get:
+      summary: Obtener un carrito por ID
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del carrito a buscar
+      responses:
+        '200':
+          description: Carrito obtenido correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        '404':
+          description: Carrito no encontrado
+        '500':
+          description: Error al obtener carrito
+
+    put:
+      summary: Actualizar un carrito por ID
+      tags:
+        - Carts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cart'
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del carrito a actualizar
+      responses:
+        '200':
+          description: Carrito actualizado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        '404':
+          description: Carrito no encontrado
+        '500':
+          description: Error al actualizar carrito
+
+    delete:
+      summary: Vaciar un carrito por ID
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del carrito a vaciar
+      responses:
+        '200':
+          description: Carrito vaciado correctamente
+        '404':
+          description: Carrito no encontrado
+        '500':
+          description: Error al vaciar carrito
+
+  /api/carts/{cid}/products/{pid}:
+    post:
+      summary: Agregar o actualizar un producto en el carrito
+      tags:
+        - Carts
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del carrito
+        - name: pid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del producto a agregar o actualizar
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: integer
+                  description: Cantidad del producto a agregar o actualizar
+      responses:
+        '200':
+          description: Producto agregado o actualizado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        '403':
+          description: Usuario no autorizado
+        '404':
+          description: Carrito o producto no encontrado
+        '500':
+          description: Error al agregar o actualizar producto en carrito
+
+    delete:
+      summary: Eliminar un producto del carrito
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del carrito
+        - name: pid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del producto a eliminar
+      responses:
+        '200':
+          description: Producto eliminado correctamente del carrito
+        '404':
+          description: Carrito o producto no encontrado
+        '500':
+          description: Error al eliminar producto del carrito
+
+  /api/carts/purchase/{cid}:
+    get:
+      summary: Crear ticket de compra para un carrito
+      tags:
+        - Carts
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del carrito para crear el ticket de compra
+      responses:
+        '200':
+          description: Ticket de compra creado correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ticket:
+                    $ref: '#/components/schemas/Ticket'
+        '403':
+          description: Usuario no autorizado
+        '404':
+          description: Carrito no encontrado
+        '500':
+          description: Error al crear ticket de compra
+
+components:
+  schemas:
+    ProductInCart:
+      type: object
+      properties:
+        id_prod:
+          type: string
+          description: ID del producto
+        quantity:
+          type: integer
+          description: Cantidad del producto
+      required:
+        - id_prod
+        - quantity
+
+    Cart:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductInCart'
+      example:
+        products:
+          - id_prod: "60b8f9a3b4c8f70016c5e2a8"
+            quantity: 2
+          - id_prod: "60b8f9a3b4c8f70016c5e2a9"
+            quantity: 1
+
+    Ticket:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Código del ticket
+        purchaser:
+          type: string
+          description: Email del comprador
+        amount:
+          type: number
+          description: Monto total de la compra
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductInCart'
+      example:
+        code: "123e4567-e89b-12d3-a456-426614174000"
+        purchaser: "usuario@ejemplo.com"
+        amount: 100.50
+        products:
+          - id_prod: "60b8f9a3b4c8f70016c5e2a8"
+            quantity: 2
+          - id_prod: "60b8f9a3b4c8f70016c5e2a9"
+            quantity: 1
+
+securitySchemes:
+  bearerAuth:
+    type: http
+    scheme: bearer
+    bearerFormat: JWT
