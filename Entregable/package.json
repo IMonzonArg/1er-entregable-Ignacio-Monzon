@@ -25,6 +25,7 @@
     "dotenv": "^16.4.5",
     "ee-first": "^1.1.1",
     "encodeurl": "^1.0.2",
+    "engine.io": "^6.5.4",
     "escape-html": "^1.0.3",
     "etag": "^1.8.1",
     "express": "^4.19.2",
@@ -74,7 +75,8 @@
     "set-function-length": "^1.2.0",
     "setprototypeof": "^1.2.0",
     "side-channel": "^1.0.4",
-    "socket.io": "^4.7.4",
+    "socket.io": "^4.7.5",
+    "socket.io-adapter": "^2.5.4",
     "statuses": "^2.0.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
@@ -83,14 +85,18 @@
     "unpipe": "^1.0.0",
     "utils-merge": "^1.0.1",
     "vary": "^1.1.2",
-    "winston": "^3.13.0"
+    "winston": "^3.13.0",
+    "ws": "^8.17.1"
   },
   "devDependencies": {
+    "chai": "^5.1.1",
+    "mocha": "^10.4.0",
     "nodemon": "^3.0.3"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "devNodemon": "nodemon src/index.js"
+    "devNodemon": "nodemon src/index.js",
+    "testMocha": "mocha test/User.test.js"
   },
   "keywords": [],
   "author": "",

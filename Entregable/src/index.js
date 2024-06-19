@@ -41,6 +41,8 @@ const swaggerOptions = {
     }
 }
 
+mongoose.connect(`mongodb+srv://ignaciolmonzon:@cluster0.hkfjh1t.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`)
+
 const specs = swaggerJSDoc(swaggerOptions)
 
 // -----------------------------------------------------------------------------------------------------------------
