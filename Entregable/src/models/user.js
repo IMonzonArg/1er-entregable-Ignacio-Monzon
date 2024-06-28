@@ -35,7 +35,15 @@ const userSchema = new Schema({
     isPremium: {
         type: Boolean,
         default: false
+    },
+    documents: {
+        type: Object,
+        default: []
+    },
+    last_connection: {
+        type: Date
     }
+
 });
 
 userSchema.pre('save', async function(next) {
