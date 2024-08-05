@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <h1>Carrito</h1>
+    <div>
+        {{#if cart.products.length}}
+            <ul>
+                {{#each cart.products}}
+                    <li>
+                        <h2>{{this.id_prod.title}}</h2>
+                        <p>{{this.id_prod.description}}</p>
+                        <p>Precio: {{this.id_prod.price}}</p>
+                        <p>Cantidad: {{this.quantity}}</p>
+                        <img src="{{this.id_prod.thumbnail}}" alt="Imagen de {{this.id_prod.title}}">
+                        <form action="/api/cart/{{../cart._id}}/{{this.id_prod._id}}" method="POST">
+                            <input type="number" name="quantity" value="{{this.quantity}}" min="0">
+                            <button type="submit">Actualizar cantidad</button>
+                        </form>
+                        <form action="/api/cart/{{../cart._id}}/{{this.id_prod._id}}" method="POST">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit">Eliminar del carrito</button>
+                        </form>
+                    </li>
+                {{/each}}
+            </ul>
+            <form action="/api/cart/{{cart._id}}/purchase" method="GET">
+                <button type="submit">Finalizar Compra</button>
+            </form>
+            <form action="/api/cart/{{cart._id}}" method="POST">
+                <input type="hidden" name="_method" value="DELETE">
+                <button type="submit">Vaciar Carrito</button>
+            </form>
+        {{else}}
+            <p>El carrito está vacío</p>
+        {{/if}}
+    </div>
+    <a href="/productos">Volver a productos</a>
+</body>
+</html>

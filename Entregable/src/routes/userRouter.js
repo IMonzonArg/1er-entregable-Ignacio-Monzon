@@ -1,11 +1,10 @@
 import { Router } from "express";
-import { getUsers, sendDocuments } from "../controllers/userController.js"
+import { getUsers, deleteInactiveUsers, sendDocuments } from "../controllers/userController.js";
 
+const userRouter = Router();
 
-const userRouter = Router()
+userRouter.get('/', getUsers);
+userRouter.delete('/', deleteInactiveUsers);
+userRouter.post('/:uid/documents', sendDocuments);
 
-userRouter.get('/', getUsers)
-
-userRouter.post('/:uid/documents', sendDocuments)
-
-export default userRouter
+export default userRouter;

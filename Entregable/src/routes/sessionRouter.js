@@ -1,30 +1,30 @@
 import { Router } from "express";
-import {login, register, sessionGithub, logout, testJWT, sendEmailPassword, changePassword } from "../controllers/sessionController.js"
+import { login, register, sessionGithub, logout, testJWT, sendEmailPassword, changePassword } from "../controllers/sessionController.js";
 import passport from "passport";
 
+const sessionRouter = Router();
 
-const sessionRouter = Router()
+// Rutas de autenticación
+sessionRouter.get('/login', (req, res) => res.render('login')); 
+sessionRouter.post('/login', passport.authenticate('login'), login);
 
-sessionRouter.get('/login', passport.authenticate('login'), login)
+sessionRouter.get('/register', (req, res) => res.render('register')); 
+sessionRouter.post('/register', passport.authenticate('register'), register);
 
-sessionRouter.post('/register',passport.authenticate('register'), register)
+sessionRouter.get('/github', passport.authenticate('github', { scope: ['user:email'] }));
+sessionRouter.get('/githubSession', passport.authenticate('github'), sessionGithub);
 
-sessionRouter.get('/github', passport.authenticate('github', { scope: ['user:email'] }), async (req, res) => { r })
+// Rutas de sesión
+sessionRouter.get('/logout', logout);
 
-sessionRouter.get('/githubSession', passport.authenticate('github'), sessionGithub)
-
-sessionRouter.get('/logout', logout)
-
-sessionRouter.get('/testJWT', passport.authenticate('jwt',{session: false}), testJWT)
-
-sessionRouter.get('/current', passport.authenticate('jwt'), async (req, res) => { res.status(200).send("usuario logueado")
+// Rutas de JWT
+sessionRouter.get('/testJWT', passport.authenticate('jwt', { session: false }), testJWT);
+sessionRouter.get('/current', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    res.status(200).send("usuario logueado");
 });
 
-sessionRouter.post('/reset-password/:token', changePassword)
-
-sessionRouter.post('/sendEmailPassword', sendEmailPassword)
-
-
-
+// Rutas de restablecimiento de contraseña
+sessionRouter.post('/reset-password/:token', changePassword);
+sessionRouter.post('/sendEmailPassword', sendEmailPassword);
 
 export default sessionRouter;

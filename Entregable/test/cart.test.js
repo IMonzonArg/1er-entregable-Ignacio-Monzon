@@ -11,13 +11,13 @@ let cartId;
 let adminToken = '';
 let testProductId;
 
-before(async () => {
-    await mongoose.connect('mongodb+srv://<tu-usuario>:<tu-contraseña>@cluster0.hkfjh1t.mongodb.net/test?retryWrites=true&w=majority');
+beforeAll(async () => {
+    await mongoose.connect('mongodb+srv://<usuario>:<contraseña>@cluster0.hkfjh1t.mongodb.net/test?retryWrites=true&w=majority');
     const testProduct = await productModel.create({
-        name: "Producto de prueba",
+        name: 'Producto de prueba',
         price: 100,
         stock: 50,
-        category: "test"
+        category: 'test'
     });
     testProductId = testProduct._id;
 
@@ -25,8 +25,7 @@ before(async () => {
     cartId = newCart._id;
 });
 
-describe('Rutas del carrito (Cart API)', function() {
-
+describe('Rutas del carrito (Cart API)', function () {
     it('Debería crear un nuevo carrito con POST /api/cart', async () => {
         const { body, statusCode } = await requester.post('/api/cart');
         expect(statusCode).to.be.equal(201);
@@ -111,7 +110,7 @@ describe('Rutas del carrito (Cart API)', function() {
         expect(body).to.have.property('products').to.be.an('array');
     });
 
-    after(async () => {
+    afterAll(async () => {
         await mongoose.connection.db.dropDatabase();
         await mongoose.disconnect();
     });

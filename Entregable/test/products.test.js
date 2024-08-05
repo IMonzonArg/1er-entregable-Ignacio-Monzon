@@ -6,8 +6,8 @@ import productModel from '../src/models/product.js';
 const expect = chai.expect;
 const requester = supertest('http://localhost:8080');
 
-before(async () => {
-    await mongoose.connect(`mongodb+srv://ignaciolmonzon:@cluster0.hkfjh1t.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`)
+beforeAll(async () => {
+    await mongoose.connect('mongodb+srv://<usuario>:<contraseña>@cluster0.hkfjh1t.mongodb.net/test?retryWrites=true&w=majority');
 });
 
 describe('Rutas de productos (Products API)', function() {
@@ -71,7 +71,7 @@ describe('Rutas de productos (Products API)', function() {
         expect(body).to.have.property('_id').eql(productId);
     });
 
-    after(async () => {
+    afterAll(async () => {
         await mongoose.connection.db.dropDatabase();
         await mongoose.disconnect();
     });

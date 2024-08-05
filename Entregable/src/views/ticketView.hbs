@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket de Compra</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+    <h1>Ticket de Compra</h1>
+    {{#if ticket}}
+        <h2>Código del Ticket: {{ticket.code}}</h2>
+        <p>Comprador: {{ticket.purchaser}}</p>
+        <p>Total: {{ticket.amount}} USD</p>
+        <h3>Productos Comprados:</h3>
+        <ul>
+            {{#each ticket.products}}
+                <li>
+                    Producto ID: {{this.id_prod}}<br>
+                    Cantidad: {{this.quantity}}
+                </li>
+            {{/each}}
+        </ul>
+    {{else}}
+        <p>No se encontró el ticket.</p>
+    {{/if}}
+
+
+    <script src="https://cdn.socket.io/4.7.4/socket.io.min.js" integrity="sha384-Gr6Lu2Ajx28mzwyVR8CFkULdCU7kMlZ9UthllibdOSo6qAiN+yXNHqtgdTvFXMT4" crossorigin="anonymous"></script>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

@@ -1,9 +1,9 @@
 import { Router } from "express";
 
-const chatRouter = Router ( )
+const chatRouter = Router();
 
 chatRouter.get('/', (req, res) => {
-    res.render("/chat", {})
-})
+    res.render("chat", {});
+});
 
-export default chatRouter
+export default chatRouter;

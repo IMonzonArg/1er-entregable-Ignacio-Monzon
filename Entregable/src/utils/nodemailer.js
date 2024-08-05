@@ -1,34 +1,33 @@
-import nodemailer from 'nodemailer'
-import jwt from 'jsonwebtoken'
+import nodemailer from 'nodemailer';
+import varenv from '../config/dotenv.js';
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: "ignaciolmonzon@gmail.com",
-        pass: ""
-        }
-})
+        user: varenv.EMAIL_USER,
+        pass: varenv.EMAIL_PASS
+    }
+});
 
 export const sendEmailChangePassword = async (email, linkChangePassword) => {
     const mailOptions = {
-        from: "ignaciolmonzon@gmail.com",
+        from: 'ignaciolmonzon@gmail.com',
         to: email,
-        subject: "Recuperacion de email",
-        text: 
-        `
+        subject: 'Recuperación de contraseña',
+        text: `
         Haz click en el siguiente enlace para cambiar tu contraseña: ${linkChangePassword}
         `,
-        html:
+        html: `
+        <p>Haz click aquí para cambiar tu contraseña: </p>
+        <button><a href="${linkChangePassword}">Cambiar contraseña</a></button>
         `
-        <p>Haz click aqui para cambiar tu contraseña: </p> <button> <a href=${linkChangePassword}>Cambiar contraseña </a></button>
-        `
-    }
+    };
 
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-            console.log("Error al enviar correro con cambio de contraseña")
+            console.log('Error al enviar correo con cambio de contraseña:', error);
         } else {
-            console.log("Correo enviado correctamente", info.response)
+            console.log('Correo enviado correctamente:', info.response);
         }
-    })
-}
+    });
+};

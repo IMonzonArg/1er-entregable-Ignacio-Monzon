@@ -1,10 +1,11 @@
 import { Router } from "express";
 import { insertImg } from "../controllers/multerController.js";
-import {uploadPerfs, uploadDocs, uploadProds} from "../config/multer.js";
-const multerRouter = Router()
+import { uploadPerfs, uploadDocs, uploadProds } from "../config/multer.js";
 
-multerRouter.post('/profiles', uploadPerfs.single('profile'), insertImg)
-multerRouter.post('/docs', uploadDocs.single('docs'), insertImg)
-multerRouter.post('/products', uploadProds.single('product'), insertImg)
+const multerRouter = Router();
 
-export default multerRouter
+multerRouter.post('/profiles', uploadPerfs.single('profile'), insertImg);
+multerRouter.post('/docs', uploadDocs.single('docs'), insertImg);
+multerRouter.post('/products', uploadProds.single('product'), insertImg);
+
+export default multerRouter;

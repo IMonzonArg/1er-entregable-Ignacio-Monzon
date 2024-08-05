@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-const ticketSchema = new Schema ({
+const ticketSchema = new Schema({
     code: {
         type: String,
         required: true
@@ -18,10 +18,23 @@ const ticketSchema = new Schema ({
         required: true
     },
     products: {
-        type: Object
+        type: [
+            {
+                id_prod: {
+                    type: Schema.Types.ObjectId,
+                    ref: 'products',
+                    required: true
+                },
+                quantity: {
+                    type: Number,
+                    required: true
+                }
+            }
+        ],
+        default: []
     }
-})
+});
 
-const ticketModel = model('ticket', ticketSchema)
+const ticketModel = model('ticket', ticketSchema);
 
-export default ticketModel
+export default ticketModel;
